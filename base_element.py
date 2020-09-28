@@ -22,6 +22,12 @@ class BaseElement(object):
     def find_many(self):
         elements = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_all_elements_located(locator=self.locator))
+        self.web_element = elements
+        return elements
+
+    def find_all_presence(self):
+        elements = WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located(locator=self.locator))
+        self.web_element = elements
         return elements
 
     def input_text(self, txt):

@@ -39,8 +39,3 @@ class Login(BasePage):
     def home_week_tab(self):
         locator = (By.CSS_SELECTOR, 'a[class="slot-selector--week-tabheader-link"]')
         return BaseElement(driver=self.driver, by=locator[0], value=locator[1])
-
-
-
-
-
