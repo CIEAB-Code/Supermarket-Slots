@@ -1,12 +1,6 @@
-import time
 from selenium import webdriver
 from tesco_login import Login
 import argparse
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
-from driver_wait_altered import WebDriverWaitChange
 
 parser = argparse.ArgumentParser(description="Check for available delivery slots on your Tesco's account")
 parser.add_argument('-e', '--email', required=True, type=str, metavar='',
@@ -54,11 +48,6 @@ for each_slot in all_week1_slots:
 if len(available_slots_1) > 0:
     # Have to account for if slots disappears before you click or some other problem.
     available_slots_1[0].click()
-    # text = available_slots_1[0].text
-    # text = text.splitlines()
-    # text = text[0]
-    # slot = browser.find_element_by_xpath("//button/span[text()='%s']" %text)
-    # slot.click()
 else:
     weeks_tab[1].click()
     available_slots_2 = []
@@ -67,11 +56,6 @@ else:
     if len(available_slots_2) > 0:
         available_slots_2[0].click()
         # Have to account for if slots disappears before you click or some other problem.
-        # text = available_slots_2[0].text
-        # text = text.splitlines()
-        # text = text[0]
-        # slot = browser.find_element_by_xpath("//button/span[text()='%s']" % text)
-        # slot.click()
     else:
         weeks_tab[2].click()
         available_slots_3 = []
@@ -80,12 +64,7 @@ else:
         if len(available_slots_3) > 0:
             # Have to account for if slots disappears before you click or some other problem.
             available_slots_3[0].click()
-            # text = available_slots_3[0].text
-            # text = text.splitlines()
-            # text = text[0]
-            # slot = browser.find_element_by_xpath("//button/span[text()='%s']" % text)
-            # slot.click()
-            
+
 
 if __name__ == '__main__':
     email = args.email
