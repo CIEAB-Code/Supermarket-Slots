@@ -85,36 +85,7 @@ else:
             # text = text[0]
             # slot = browser.find_element_by_xpath("//button/span[text()='%s']" % text)
             # slot.click()
-
-
-# #weeks_tab[0].click()
-# # Make variable 'available_slot' out side of ifs/loops if one is available break loop and click on slot
-# available_slots_1 = browser.find_elements_by_css_selector(
-#     'button[class="button button-secondary small available-slot--button"]')
-# # locate = (By.CSS_SELECTOR, 'button[class="button button-secondary small available-slot--button"]')
-# # available_slots_1 = WebDriverWaitChange(browser, 5).until(
-# #     EC.visibility_of_all_elements_located(locator=locate))
-# if len(available_slots_1) <= 0:
-#     weeks_tab[1].click()
-#     available_slots_2 = browser.find_elements_by_css_selector(
-#         'button[class="button button-secondary small available-slot--button"]')
-#     if len(available_slots_2) > 0:
-#         # Week 2 has slots
-#         time.sleep(3)
-#         available_slots_2[0].click()
-#     elif len(available_slots_2) <= 0:
-#         weeks_tab[2].click()
-#         available_slots_3 = browser.find_elements_by_css_selector(
-#             'button[class="button button-secondary small available-slot--button"]')
-#         if len(available_slots_3 > 0):
-#             # Week 3 has slots
-#             available_slots_3[0].click()
-#             slot = browser.find_element_by_xpath(("//button[@class='button button-secondary small available-slot--button']/span")[0])
-#
-#
-# elif len(available_slots_1) > 0:
-#     # Week 1 has slots
-
+            
 
 if __name__ == '__main__':
     email = args.email
