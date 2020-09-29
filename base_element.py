@@ -11,7 +11,7 @@ class BaseElement(object):
         self.locator = (self.by, self.value)
 
         self.web_element = None
-        #self.find()
+
 
     def find(self):
         element = WebDriverWait(self.driver, 10).until(
@@ -31,7 +31,7 @@ class BaseElement(object):
         return elements
 
     def input_text(self, txt):
-        self.find() #TEST
+        self.find()
         self.web_element.send_keys(txt)
         return None
 
@@ -43,6 +43,6 @@ class BaseElement(object):
 
     @property
     def text(self):
-        self.find() #TEST
+        self.find()
         text = self.web_element.text
         return text

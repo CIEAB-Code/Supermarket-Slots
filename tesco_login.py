@@ -5,8 +5,6 @@ from base_page import BasePage
 
 class Login(BasePage):
 
-    # Login
-
     url = 'https://www.tesco.com/groceries/en-GB/slots/delivery'
 
     @property
