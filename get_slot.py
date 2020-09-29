@@ -1,7 +1,12 @@
 from selenium import webdriver
 from tesco_login import Login
 import argparse
+from notify_run import Notify
 
+# Setting up variable fo notify_run to send notification message to registered phone
+notify = Notify()
+
+# Parser to receive email and password input from user from command line
 parser = argparse.ArgumentParser(description="Check for available delivery slots on your Tesco's account")
 parser.add_argument('-e', '--email', required=True, type=str, metavar='',
                     help="Enter your full email address to your Tesco's account")
@@ -12,9 +17,7 @@ args = parser.parse_args()
 email = args.email
 password = args.password
 
-print(email)
-print(password)
-
+# Chrome browser
 browser = webdriver.Chrome()
 
 # Login
@@ -36,34 +39,39 @@ login_page.sign_in_button.click()
 # Get access to tabs for week 1-3
 weeks_tab = login_page.home_week_tab.find_many()
 
-# Week 1
+# All weeks
 
-all_week1_slots = browser.find_elements_by_xpath((
-    "//button[@class='button button-secondary small available-slot--button']"))
-available_slots_1 = []
-for each_slot in all_week1_slots:
-    if 'Between' in each_slot.text:
-        available_slots_1.append(each_slot)
-
-if len(available_slots_1) > 0:
-    # Have to account for if slots disappears before you click or some other problem.
-    available_slots_1[0].click()
-else:
-    weeks_tab[1].click()
-    available_slots_2 = []
-    all_week2_slots = browser.find_elements_by_xpath((
+# Function to check for available slots
+def check_available():
+    all_slots = browser.find_elements_by_xpath((
         "//button[@class='button button-secondary small available-slot--button']"))
-    if len(available_slots_2) > 0:
-        available_slots_2[0].click()
-        # Have to account for if slots disappears before you click or some other problem.
+    available_slots = []
+    for each_slot in all_slots:
+        if 'Between' in each_slot.text:
+            available_slots.append(each_slot)
+
+    return available_slots
+
+
+notification = "Delivery slot reserved!"
+week1_slots = check_available()
+if len(week1_slots) > 0:
+    week1_slots[0].click()
+    notify.send(notification)
+else:
+    # Check week 2 slots
+    weeks_tab[1].click()
+    week2_slots = check_available()
+    if len(week2_slots) > 0:
+        week2_slots[0].click()
+        notify.send(notification)
     else:
+        # Check week 3 slots
         weeks_tab[2].click()
-        available_slots_3 = []
-        all_week3_slots = browser.find_elements_by_xpath((
-            "//button[@class='button button-secondary small available-slot--button']"))
-        if len(available_slots_3) > 0:
-            # Have to account for if slots disappears before you click or some other problem.
-            available_slots_3[0].click()
+        week3_slots = check_available()
+        if len(week3_slots) > 0:
+            week3_slots[0].click()
+            notify.send(notification)
 
 
 if __name__ == '__main__':
