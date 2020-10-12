@@ -39,21 +39,25 @@ weeks_tab = login_page.home_week_tab.find_many()
 
 def check_available():
     # Function to check for available slots
+    # Class name changed on website from:
+    # //button[@class='button button-secondary small available-slot--button']"
+    # to: //button[@class='button button-secondary small available-slot--button available-slot--button-oop808']"
     all_slots = browser.find_elements_by_xpath((
-        "//button[@class='button button-secondary small available-slot--button']"))
+        "//button[@class='button button-secondary small available-slot--button available-slot--button-oop808']"))
     available_slots = []
     for each_slot in all_slots:
         if 'Between' in each_slot.text:
             available_slots.append(each_slot)
-
+    print(f"Available slots = {len(available_slots)}")
     return available_slots
 
 
 def send_notification():
-    # Fuction for sending notification when a slot is reserved
+    # Function for sending notification when a slot is reserved
     notification = "Delivery slot reserved!"
     notify.send(notification)
     winsound.Beep(440, 1000)
+    print("Slot booked!")
 
 
 week1_slots = check_available()
@@ -80,3 +84,4 @@ browser.quit()
 if __name__ == '__main__':
     email = args.email
     password = args.password
+
