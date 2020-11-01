@@ -1,8 +1,12 @@
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from tesco_login import Login
 import argparse
 from notify_run import Notify
 import winsound
+
+# Condition for while loop to run when there are no slots found
+slots_not_free = True
 
 # Setting up variable fo notify_run to send notification message to registered phone
 notify = Notify()
@@ -18,8 +22,8 @@ args = parser.parse_args()
 email = args.email
 password = args.password
 
-# Chrome browser
-browser = webdriver.Chrome()
+# Chrome browser, will update and save latest version of Chrome webdriver automatically to avoid compatibility errors.
+browser = webdriver.Chrome(ChromeDriverManager().install())
 
 # Login
 login_page = Login(driver=browser)
@@ -36,6 +40,7 @@ login_page.sign_in_button.click()
 weeks_tab = login_page.home_week_tab.find_many()
 
 # All weeks
+
 
 def check_available():
     # Function to check for available slots
@@ -60,28 +65,40 @@ def send_notification():
     print("Slot booked!")
 
 
-week1_slots = check_available()
-if len(week1_slots) > 0:
-    week1_slots[0].click()
-    send_notification()
-else:
-    # Check week 2 slots
-    weeks_tab[1].click()
-    week2_slots = check_available()
-    if len(week2_slots) > 0:
-        week2_slots[0].click()
-        send_notification()
-    else:
-        # Check week 3 slots
-        weeks_tab[2].click()
-        week3_slots = check_available()
-        if len(week3_slots) > 0:
-            week3_slots[0].click()
-            send_notification()
+def stop_loop():
+    slots_free = True
+    browser.quit()
 
-browser.quit()
+count = 0
+while slots_not_free:
+    print(count)
+    if count == 0:
+        weeks_tab[0].click()
+    count += 1
+    week1_slots = check_available()
+    if len(week1_slots) > 0:
+        week1_slots[0].click()
+        send_notification()
+        stop_loop()
+    else:
+        # Check week 2 slots
+        weeks_tab[1].click()
+        week2_slots = check_available()
+        if len(week2_slots) > 0:
+            week2_slots[0].click()
+            send_notification()
+            stop_loop()
+        else:
+            # Check week 3 slots
+            weeks_tab[2].click()
+            week3_slots = check_available()
+            if len(week3_slots) > 0:
+                week3_slots[0].click()
+                send_notification()
+                stop_loop()
+
+# browser.quit()
 
 if __name__ == '__main__':
     email = args.email
     password = args.password
-
