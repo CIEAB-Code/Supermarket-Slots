@@ -4,12 +4,18 @@ from tesco_login import Login
 import argparse
 from notify_run import Notify
 import winsound
+import time
+from datetime import datetime
 
 # Condition for while loop to run when there are no slots found
 slots_not_free = True
 
 # Setting up variable fo notify_run to send notification message to registered phone
 notify = Notify()
+
+# Setting default start and end times
+start_time = 6
+end_time = 24
 
 # Parser to receive email and password input from user from command line
 parser = argparse.ArgumentParser(description="Check for available delivery slots on your Tesco's account")
@@ -65,23 +71,42 @@ def send_notification():
     print("Slot booked!")
 
 
+def check_time():
+    now = datetime.now()
+    #current_time = now.strftime("%H:%M:%S")
+    current_hour = now.strftime("%H")
+    return int(current_hour)
+
+
 def stop_loop():
     slots_free = True
     browser.quit()
 
+
 count = 0
-while slots_not_free:
+while slots_not_free and check_time() >= start_time and check_time() <= end_time:
+    time.sleep(10)
+    browser.refresh()
     print(count)
     if count == 0:
+        # Re-finding tabs as having an issue with overlapping and the incorrect tab almost being clicked
+        weeks_tab = login_page.home_week_tab.find_many()
+        time.sleep(2)
         weeks_tab[0].click()
     count += 1
     week1_slots = check_available()
     if len(week1_slots) > 0:
+        # Re-finding tabs as having an issue with overlapping and the incorrect tab almost being clicked
+        weeks_tab = login_page.home_week_tab.find_many()
+        time.sleep(2)
         week1_slots[0].click()
         send_notification()
         stop_loop()
     else:
         # Check week 2 slots
+        # Re-finding tabs as having an issue with overlapping and the incorrect tab almost being clicked
+        weeks_tab = login_page.home_week_tab.find_many()
+        time.sleep(2)
         weeks_tab[1].click()
         week2_slots = check_available()
         if len(week2_slots) > 0:
@@ -90,6 +115,9 @@ while slots_not_free:
             stop_loop()
         else:
             # Check week 3 slots
+            # Re-finding tabs as having an issue with overlapping and the incorrect tab almost being clicked
+            time.sleep(2)
+            weeks_tab = login_page.home_week_tab.find_many()
             weeks_tab[2].click()
             week3_slots = check_available()
             if len(week3_slots) > 0:
@@ -102,3 +130,5 @@ while slots_not_free:
 if __name__ == '__main__':
     email = args.email
     password = args.password
+    start_time = 6
+    end_time = 24
